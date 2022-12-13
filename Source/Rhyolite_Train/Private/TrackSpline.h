@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Engine\Classes\Components\SplineComponent.h"
 #include "TrackSpline.generated.h"
 
 UCLASS()
@@ -23,8 +24,21 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	FVector GetLocationAtIndex(int32 Index);
+
+public:
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Customization")
+	float Offset = -13.f;
+
+	int32 NumInstances = 0;
+
 protected:
-	//Set the static meshes of the track
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USplineComponent* Spline;
+
+	//Set the instanced static meshes of the track
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Meshes")
 	UInstancedStaticMeshComponent* InstancedTrack;
 
@@ -33,5 +47,16 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Meshes")
 	UInstancedStaticMeshComponent* InstancedHangar;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Meshes")
+	UStaticMesh* TrackMesh;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Meshes")
+	UStaticMesh* ChainMesh;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Meshes")
+	UStaticMesh* HangarMesh;
+
+	float Spacing = 0.f;
 
 };
