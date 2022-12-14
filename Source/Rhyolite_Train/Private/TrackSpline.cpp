@@ -3,6 +3,8 @@
 
 #include "TrackSpline.h"
 #include "Engine\Classes\Components\InstancedStaticMeshComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "UObject/ConstructorHelpers.h"
 
 
 // Sets default values
@@ -25,11 +27,21 @@ ATrackSpline::ATrackSpline()
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
 		chainMesh(TEXT("'/Game/Meshes/Rail/track_section_chainlink/track_section_chainlink.track_section_chainlink'"));
-	TrackMesh = chainMesh.Object;
+	ChainMesh = chainMesh.Object;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
 		hangarMesh(TEXT("'/Game/Meshes/Rail/track_section_hangar/track_section_hangar.track_section_hangar'"));
-	TrackMesh = hangarMesh.Object;
+	HangarMesh = hangarMesh.Object;
+
+}
+
+//https://forums.unrealengine.com/t/construction-scripting-in-c-addstaticmeshcomponent/9167/2
+//https://forums.unrealengine.com/t/c-construction-script-behaves-completely-differently-to-bp-construction-script/128066
+
+
+void ATrackSpline::OnConstruction(const FTransform& transform)
+{
+	Super::OnConstruction(transform);
 
 	InstancedTrack->SetStaticMesh(TrackMesh);
 	InstancedChain->SetStaticMesh(ChainMesh);
@@ -39,21 +51,37 @@ ATrackSpline::ATrackSpline()
 	FBox TrackBoundingBox = TrackMesh->GetBoundingBox();
 	FVector BoxLength = (TrackBoundingBox.Max - TrackBoundingBox.Min);
 	Spacing = BoxLength.X + Offset;
-	NumInstances = FMath::Floor(Spline->GetSplineLength() / Spacing);
+	UE_LOG(LogTemp, Warning, TEXT("The spacing value is: %f"), Spacing);
+
+	SplineLength = Spline->GetSplineLength();
+	UE_LOG(LogTemp, Warning, TEXT("The spline length value is: %f"), SplineLength);
+
+	NumInstances = FMath::Floor(SplineLength / Spacing);
+	UE_LOG(LogTemp, Warning, TEXT("The numinstances value is: %d"), NumInstances);
 
 	//Generate Instances
 	for (int i = 0; i <= NumInstances; i++)
 	{
-		GetLocationAtIndex(i);
+		FVector vectorCurrentInstance = GetLocationAtIndex(i);
+		FVector vectorNextInstance = GetLocationAtIndex(i + 1);
+
+		FVector vecDistance = vectorNextInstance - vectorCurrentInstance;
+		FRotator rotX = UKismetMathLibrary::MakeRotFromX(vecDistance);
+		FTransform transformInstance = UKismetMathLibrary::MakeTransform(vectorCurrentInstance, rotX);
+
+		InstancedTrack->AddInstance(transformInstance);
+		InstancedChain->AddInstance(transformInstance);
+		InstancedHangar->AddInstance(transformInstance);
+
 	}
 }
 
 FVector ATrackSpline::GetLocationAtIndex(int32 Index)
 {
-	UE_LOG(LogTemp, Warning, TEXT("yo"));
-	FVector vector = FVector(10, 10, 10);
-	return vector;
+	UE_LOG(LogTemp, Warning, TEXT("The float value is: %f"), SplineLength);
+	return Spline->GetLocationAtDistanceAlongSpline((Spacing * Index), ESplineCoordinateSpace::Local);
 }
+
 
 // Called when the game starts or when spawned
 void ATrackSpline::BeginPlay()

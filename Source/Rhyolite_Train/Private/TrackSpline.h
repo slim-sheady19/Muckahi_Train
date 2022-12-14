@@ -20,6 +20,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void OnConstruction(const FTransform& transform) override;
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -31,11 +34,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Customization")
 	float Offset = -13.f;
 
-	int32 NumInstances = 0;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Customization")
+	float SplineLength;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int32 NumInstances;
 
 protected:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USplineComponent* Spline;
 
 	//Set the instanced static meshes of the track
@@ -57,6 +64,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Meshes")
 	UStaticMesh* HangarMesh;
 
-	float Spacing = 0.f;
+	float Spacing;
 
 };
