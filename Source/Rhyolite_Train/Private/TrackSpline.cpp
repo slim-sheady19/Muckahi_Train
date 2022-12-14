@@ -20,7 +20,7 @@ ATrackSpline::ATrackSpline()
 	InstancedChain = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Chain"));
 	InstancedHangar = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Hangar"));
 
-	//Set meshes with hard references with hard reference
+	//Set meshes with hard references
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
 		trackMesh(TEXT("'/Game/Meshes/Rail/track_section_track/track_section_track.track_section_track'"));
 	TrackMesh = trackMesh.Object;
@@ -32,12 +32,7 @@ ATrackSpline::ATrackSpline()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
 		hangarMesh(TEXT("'/Game/Meshes/Rail/track_section_hangar/track_section_hangar.track_section_hangar'"));
 	HangarMesh = hangarMesh.Object;
-
 }
-
-//https://forums.unrealengine.com/t/construction-scripting-in-c-addstaticmeshcomponent/9167/2
-//https://forums.unrealengine.com/t/c-construction-script-behaves-completely-differently-to-bp-construction-script/128066
-
 
 void ATrackSpline::OnConstruction(const FTransform& transform)
 {
@@ -51,14 +46,9 @@ void ATrackSpline::OnConstruction(const FTransform& transform)
 	FBox TrackBoundingBox = TrackMesh->GetBoundingBox();
 	FVector BoxLength = (TrackBoundingBox.Max - TrackBoundingBox.Min);
 	Spacing = BoxLength.X + Offset;
-	UE_LOG(LogTemp, Warning, TEXT("The spacing value is: %f"), Spacing);
+	NumInstances = FMath::Floor(Spline->GetSplineLength() / Spacing);
 
-	SplineLength = Spline->GetSplineLength();
-	UE_LOG(LogTemp, Warning, TEXT("The spline length value is: %f"), SplineLength);
-
-	NumInstances = FMath::Floor(SplineLength / Spacing);
-	UE_LOG(LogTemp, Warning, TEXT("The numinstances value is: %d"), NumInstances);
-
+	//Clear previous instances from previous spline transform
 	InstancedChain->ClearInstances();
 	InstancedTrack->ClearInstances();
 	InstancedHangar->ClearInstances();
@@ -76,16 +66,12 @@ void ATrackSpline::OnConstruction(const FTransform& transform)
 		InstancedTrack->AddInstance(transformInstance);
 		InstancedChain->AddInstance(transformInstance);
 		InstancedHangar->AddInstance(transformInstance);
-
 	}
 }
 
 FVector ATrackSpline::GetLocationAtIndex(int32 Index)
 {
-	UE_LOG(LogTemp, Warning, TEXT("The splinelength value is: %f"), SplineLength);
-	FVector locationSplineIndex = Spline->GetLocationAtDistanceAlongSpline((Spacing * Index), ESplineCoordinateSpace::World);
-	UE_LOG(LogTemp, Warning, TEXT("The distance along vector is value is: %s"), *locationSplineIndex.ToString());
-	return locationSplineIndex;
+	return Spline->GetLocationAtDistanceAlongSpline((Spacing * Index), ESplineCoordinateSpace::World);
 }
 
 
@@ -93,13 +79,11 @@ FVector ATrackSpline::GetLocationAtIndex(int32 Index)
 void ATrackSpline::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void ATrackSpline::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
