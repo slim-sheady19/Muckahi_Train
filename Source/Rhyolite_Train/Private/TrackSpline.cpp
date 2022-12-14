@@ -59,6 +59,10 @@ void ATrackSpline::OnConstruction(const FTransform& transform)
 	NumInstances = FMath::Floor(SplineLength / Spacing);
 	UE_LOG(LogTemp, Warning, TEXT("The numinstances value is: %d"), NumInstances);
 
+	InstancedChain->ClearInstances();
+	InstancedTrack->ClearInstances();
+	InstancedHangar->ClearInstances();
+
 	//Generate Instances
 	for (int i = 0; i <= NumInstances; i++)
 	{
@@ -78,8 +82,10 @@ void ATrackSpline::OnConstruction(const FTransform& transform)
 
 FVector ATrackSpline::GetLocationAtIndex(int32 Index)
 {
-	UE_LOG(LogTemp, Warning, TEXT("The float value is: %f"), SplineLength);
-	return Spline->GetLocationAtDistanceAlongSpline((Spacing * Index), ESplineCoordinateSpace::Local);
+	UE_LOG(LogTemp, Warning, TEXT("The splinelength value is: %f"), SplineLength);
+	FVector locationSplineIndex = Spline->GetLocationAtDistanceAlongSpline((Spacing * Index), ESplineCoordinateSpace::World);
+	UE_LOG(LogTemp, Warning, TEXT("The distance along vector is value is: %s"), *locationSplineIndex.ToString());
+	return locationSplineIndex;
 }
 
 
