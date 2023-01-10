@@ -4,7 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "TrainController.h"
+#include "TrackSpline.h"
 #include "Train.generated.h"
+
+UENUM(BlueprintType)
+enum class ETrainType : uint8
+{
+	EMS_Cab UMETA(DisplayName = "Cab"),
+	EMS_Locomotive UMETA(DisplayName = "Locomotive"),
+	EMS_HPU UMETA(DisplayName = "HPU"),
+	EMS_Hoist UMETA(DisplayName = "Hoist")
+};
 
 UCLASS()
 class ATrain : public AActor
@@ -22,5 +33,30 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ATrackSpline* TrackSpline;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	float Speed;
+
+	UPROPERTY(VisibleAnywhere)
+	float StartPosition;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ATrainController* TrainController;
+
+private:
+	
+	//Bogey that attaches to track spline
+	UPROPERTY(BlueprintReadWrite, Category = "Mesh")
+	UStaticMeshComponent* RootBogey;
+
+	UPROPERTY(VisibleAnywhere)
+	float Distance;
+
 
 };
