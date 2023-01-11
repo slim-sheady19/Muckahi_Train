@@ -36,7 +36,7 @@ protected:
 protected:
 
 	UFUNCTION(BlueprintCallable)
-	void UpdateBogeyPosition(UPARAM(ref) UStaticMeshComponent* Bogey);
+	void UpdateBogeyPosition(UPARAM(ref) UStaticMeshComponent* Bogey, const float DeltaBogeyDistanceFromRootBogey = 0.f);
 
 	void UpdateDistance(float DeltaTime);
 

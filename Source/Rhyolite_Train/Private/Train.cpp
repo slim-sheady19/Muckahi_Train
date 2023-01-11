@@ -37,14 +37,14 @@ void ATrain::Tick(float DeltaTime)
 	UpdateDistance(DeltaTime);
 }
 
-void ATrain::UpdateBogeyPosition(UStaticMeshComponent* Bogey)
+void ATrain::UpdateBogeyPosition(UStaticMeshComponent* Bogey, const float DeltaBogeyDistanceFromRootBogey)
 {
 	if (Bogey == nullptr)
 	{
 		return;
 	}
 
-	float currentDistance = Distance + StartPosition;
+	float currentDistance = Distance + StartPosition + DeltaBogeyDistanceFromRootBogey;
 	FTransform splinePositionTransform = TrackSpline->Spline->GetTransformAtDistanceAlongSpline(currentDistance, ESplineCoordinateSpace::World);
 
 	Bogey->SetWorldTransform(splinePositionTransform);
