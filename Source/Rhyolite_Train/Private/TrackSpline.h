@@ -42,10 +42,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int32 NumInstances;
 
-protected:
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USplineComponent* Spline;
+
+protected:
+
 
 	//Set the instanced static meshes of the track
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Meshes")
