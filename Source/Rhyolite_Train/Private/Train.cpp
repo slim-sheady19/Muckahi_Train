@@ -10,6 +10,9 @@ ATrain::ATrain()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	RootBogey = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Root Bogey"));
+	SetRootComponent(RootBogey);
 }
 
 // Called when the game starts or when spawned
@@ -25,12 +28,40 @@ void ATrain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//do nothing in tick if we do not want train moving
+	if (Disabled)
+	{
+		return;
+	}
+
+	UpdateDistance(DeltaTime);
+}
+
+void ATrain::UpdateBogeyPosition(UStaticMeshComponent* Bogey)
+{
+	if (Bogey == nullptr)
+	{
+		return;
+	}
+
+	float currentDistance = Distance + StartPosition;
+	FTransform splinePositionTransform = TrackSpline->Spline->GetTransformAtDistanceAlongSpline(currentDistance, ESplineCoordinateSpace::World);
+
+	Bogey->SetWorldTransform(splinePositionTransform);
+}
+
+void ATrain::UpdateDistance(float DeltaTime)
+{
+	float deltaDistance = Speed * DeltaTime;
+	float distanceTravelled = Distance + deltaDistance;
+
+	Distance = distanceTravelled;
 }
 
 void ATrain::GetTrackSpline()
 {
 	//if TrackSpline was not set by hand in editor, get it automatically with GetActorOfClass
-	if (!TrackSpline)
+	if (TrackSpline == nullptr)
 	{
 		AActor* foundTrack = UGameplayStatics::GetActorOfClass(GetWorld(), ATrackSpline::StaticClass());
 
@@ -51,7 +82,6 @@ void ATrain::GetTrackSpline()
 		UE_LOG(LogTemp, Warning, TEXT("Track is valid"));
 	}
 }
-
 
 void ATrain::SetOnTrack()
 {

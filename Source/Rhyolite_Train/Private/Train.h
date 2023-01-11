@@ -26,6 +26,7 @@ public:
 	// Sets default values for this actor's properties
 	ATrain();
 
+	UFUNCTION(BlueprintCallable, CallInEditor)
 	void SetOnTrack();
 
 protected:
@@ -33,6 +34,11 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateBogeyPosition(UPARAM(ref) UStaticMeshComponent* Bogey);
+
+	void UpdateDistance(float DeltaTime);
 
 	void GetTrackSpline();
 
@@ -43,26 +49,26 @@ public:
 
 public:
 
+	//Bogey that attaches to track spline
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UStaticMeshComponent* RootBogey = nullptr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ATrackSpline* TrackSpline;
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float Speed;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	float StartPosition = 0.f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	ATrainController* TrainController;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category ="Debugging")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category ="Default")
 	bool Disabled = false;
 
-private:
-	
-	//Bogey that attaches to track spline
-	UPROPERTY(VisibleAnywhere, Category = "Mesh")
-	UStaticMeshComponent* RootBogey;
+protected:
 
 	UPROPERTY(VisibleAnywhere)
 	float Distance = 0.f;
