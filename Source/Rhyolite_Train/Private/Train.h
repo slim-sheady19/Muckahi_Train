@@ -70,6 +70,7 @@ public:
 
 protected:
 
+	//The distance currently travelled along spline
 	UPROPERTY(VisibleAnywhere)
 	float Distance = 0.f;
 };
