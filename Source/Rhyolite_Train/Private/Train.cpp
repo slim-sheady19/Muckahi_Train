@@ -13,6 +13,7 @@ ATrain::ATrain()
 
 	RootBogey = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Root Bogey"));
 	SetRootComponent(RootBogey);
+	RootBogey->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called when the game starts or when spawned

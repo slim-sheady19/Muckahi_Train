@@ -34,5 +34,13 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float FrontBogeyDistanceFromRootBogey;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UStaticMeshComponent* Body = nullptr;
+
+protected:
+
+	void UpdateRotation();
+
 	
 };
