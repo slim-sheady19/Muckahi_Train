@@ -4,7 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "TrainController.h"
+#include "TrackSpline.h"
 #include "Train.generated.h"
+
+UENUM(BlueprintType)
+enum class ETrainType : uint8
+{
+	EMS_Cab UMETA(DisplayName = "Cab"),
+	EMS_Locomotive UMETA(DisplayName = "Locomotive"),
+	EMS_HPU UMETA(DisplayName = "HPU"),
+	EMS_Hoist UMETA(DisplayName = "Hoist")
+};
 
 UCLASS()
 class ATrain : public AActor
@@ -15,12 +26,51 @@ public:
 	// Sets default values for this actor's properties
 	ATrain();
 
+	UFUNCTION(BlueprintCallable, CallInEditor)
+	void SetOnTrack();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+protected:
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateBogeyPosition(UPARAM(ref) UStaticMeshComponent* Bogey, const float DeltaBogeyDistanceFromRootBogey = 0.f);
+
+	void UpdateDistance(float DeltaTime);
+
+	void GetTrackSpline();
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+public:
+
+	//Bogey that attaches to track spline
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UStaticMeshComponent* RootBogey = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ATrackSpline* TrackSpline;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	float Speed;
+
+	UPROPERTY(EditAnywhere)
+	float StartPosition = 0.f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ATrainController* TrainController;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category ="Default")
+	bool Disabled = false;
+
+protected:
+
+	//The distance currently travelled along spline
+	UPROPERTY(VisibleAnywhere)
+	float Distance = 0.f;
 };
