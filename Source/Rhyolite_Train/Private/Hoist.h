@@ -18,6 +18,15 @@ class AHoist : public ATrain
 protected:
 
 	UFUNCTION(BlueprintCallable)
-		void SetBogeyOnSpline(UPARAM(ref)USceneComponent* AttachPoint, UPARAM(ref)UStaticMeshComponent* Bogey);
+	void SetBogeyOnSpline(UPARAM(ref)USceneComponent* AttachPoint, UPARAM(ref)UStaticMeshComponent* Bogey);
+
+	UFUNCTION(BlueprintCallable)
+	void RotateSpreaderBar(UPARAM(ref)UStaticMeshComponent* SpreaderBarToRotate, UPARAM(ref)USceneComponent* AttachPointToLookAt);
+
+	UFUNCTION(BlueprintCallable)
+		void RotateAndScaleConnectorTube(
+			UPARAM(ref)UStaticMeshComponent* ConnectorTube,
+			UPARAM(ref)UStaticMeshComponent* StartConnector,
+			UPARAM(ref)UStaticMeshComponent* TargetConnector);
 	
 };
