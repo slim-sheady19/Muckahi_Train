@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "TrainController.h"
+//#include "TrainController.h"
 #include "TrackSpline.h"
 #include "Train.generated.h"
+
 
 UENUM(BlueprintType)
 enum class ETrainType : uint8
@@ -16,6 +17,8 @@ enum class ETrainType : uint8
 	EMS_HPU UMETA(DisplayName = "HPU"),
 	EMS_Hoist UMETA(DisplayName = "Hoist")
 };
+
+//maybe create enums in an external file/class?  because I am using the exact ones in the TrainController
 
 UCLASS()
 class ATrain : public AActor
@@ -63,7 +66,7 @@ public:
 	float StartPosition = 0.f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ATrainController* TrainController;
+	class ATrainController* TrainController;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category ="Default")
 	bool Disabled = false;
