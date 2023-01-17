@@ -24,7 +24,7 @@ protected:
 	void RotateSpreaderBar(UPARAM(ref)UStaticMeshComponent* SpreaderBarToRotate, UPARAM(ref)USceneComponent* AttachPointToLookAt);
 
 	UFUNCTION(BlueprintCallable)
-		void RotateAndScaleConnectorTube(
+	void RotateAndScaleConnectorTube(
 			UPARAM(ref)UStaticMeshComponent* ConnectorTube,
 			UPARAM(ref)UStaticMeshComponent* StartConnector,
 			UPARAM(ref)UStaticMeshComponent* TargetConnector);
