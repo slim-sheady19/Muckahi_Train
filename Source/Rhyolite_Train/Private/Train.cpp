@@ -3,6 +3,7 @@
 
 #include "Train.h"
 #include "TrackSpline.h"
+#include "TrainController.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -98,5 +99,12 @@ void ATrain::SetOnTrack()
 		UE_LOG(LogTemp, Warning, TEXT("No track spline in level!"));
 	}
 
+}
+
+void ATrain::BeginDestroy()
+{
+	Super::BeginDestroy();
+
+	TrainController->CleanTrainArray();
 }
 

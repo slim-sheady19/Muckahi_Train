@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-//#include "TrainController.h"
 #include "TrackSpline.h"
 #include "Train.generated.h"
 
+class ATrainController;
 
 UENUM(BlueprintType)
 enum class ETrainType : uint8
@@ -45,6 +45,8 @@ protected:
 
 	void GetTrackSpline();
 
+	virtual void BeginDestroy() override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -65,8 +67,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	float StartPosition = 0.f;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	class ATrainController* TrainController;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	ATrainController* TrainController;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category ="Default")
 	bool Disabled = false;

@@ -7,7 +7,6 @@
 #include "Train.h"
 #include "TrainController.generated.h"
 
-
 UCLASS()
 class ATrainController : public AActor
 {
@@ -16,6 +15,12 @@ class ATrainController : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATrainController();
+
+	/**This function is being used to clean up the null refs inside the TrainsInLevel array, called from any train that is being deleted.
+	* This would be better achieved with using an event binding or delegate.
+	* Also would like a way to directly reference the train to destroy in the array rather than looping through the whole array
+	 */
+	void CleanTrainArray();
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,6 +31,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 	TSubclassOf<ATrain> TrainBlueprintClass = ATrain::StaticClass();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Organization")
+	TArray<ATrain*> TrainsInLevel;
 
 public:	
 	// Called every frame
