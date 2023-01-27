@@ -103,7 +103,7 @@ void ATrain::SetOnTrack()
 
 void ATrain::Destroyed()
 {
-	TrainController->CleanTrainArray(this);
+	TrainController->RemoveTrainFromArray(this);
 
 	Super::Destroyed();
 }
