@@ -101,10 +101,10 @@ void ATrain::SetOnTrack()
 
 }
 
-void ATrain::BeginDestroy()
+void ATrain::Destroyed()
 {
-	Super::BeginDestroy();
+	TrainController->CleanTrainArray(this);
 
-	TrainController->CleanTrainArray();
+	Super::Destroyed();
 }
 

@@ -12,22 +12,6 @@ ATrainController::ATrainController()
 
 }
 
-void ATrainController::CleanTrainArray()
-{
-	//using the reference here to act on the actual array element
-	//loop through the array to find any train being marked for destruction, and if yes remove from array
-	
-	/*if ((TrainsInLevel.Num()) == 0) return;
-	
-	for (auto& train : TrainsInLevel)
-	{
-			bool destroying = train->IsReadyForFinishDestroy();
-			if (destroying)
-			{
-				TrainsInLevel.Remove(train);
-			}
-	}*/
-}
 
 void ATrainController::SpawnTrain()
 {

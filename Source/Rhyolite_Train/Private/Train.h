@@ -45,7 +45,9 @@ protected:
 
 	void GetTrackSpline();
 
-	virtual void BeginDestroy() override;
+	//virtual void BeginDestroy() override;
+
+	virtual void Destroyed() override;
 
 public:	
 	// Called every frame
