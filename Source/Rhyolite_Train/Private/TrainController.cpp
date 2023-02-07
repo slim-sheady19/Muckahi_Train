@@ -34,6 +34,7 @@ void ATrainController::SpawnTrain()
 				TrainsInLevel.Insert(spawnedTrain, 0);
 
 				spawnedTrain->SetOnTrack(0);
+				spawnedTrain->PreviousTrain = TrainsInLevel[1];
 
 				//this is crashing editor.  need to figure out how to bump all trains forward when new one is spawned
 				int numTrainsInLevel = TrainsInLevel.Num();
@@ -55,6 +56,12 @@ void ATrainController::SpawnTrain()
 
 						train->StartPosition = newPosition;
 						train->SetOnTrack(newPosition);
+
+						if (i < (numTrainsInLevel - 1))
+						{
+							train->PreviousTrain = TrainsInLevel[i + 1];
+						}
+						
 					}
 
 					
@@ -68,6 +75,7 @@ void ATrainController::SpawnTrain()
 				spawnedTrain->SetOnTrack(0);
 				TrainsInLevel.Add(spawnedTrain);
 			}
+
 		}
 	}
 }

@@ -41,6 +41,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float RearConnectionDistanceFromRootBogey = 0.f;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Train")
+	ATrain* PreviousTrain;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
