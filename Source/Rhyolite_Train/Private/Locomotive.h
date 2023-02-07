@@ -40,6 +40,7 @@ public:
 
 protected:
 
+	UFUNCTION(BlueprintCallable)
 	void UpdateRotation();
 
 	

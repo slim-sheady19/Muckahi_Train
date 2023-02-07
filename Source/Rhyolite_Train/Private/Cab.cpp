@@ -3,3 +3,9 @@
 
 #include "Cab.h"
 
+/*
+ACab::ACab()
+{
+	FrontConnectionDistanceFromRootBogey = 0.f;
+	RearConnectionDistanceFromRootBogey = -20.f;
+}*/

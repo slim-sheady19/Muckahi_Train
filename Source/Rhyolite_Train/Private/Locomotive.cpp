@@ -18,6 +18,9 @@ ALocomotive::ALocomotive()
 	Body->SetupAttachment(RootBogey);
 	Body->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	FrontConnectionDistanceFromRootBogey = 580.f;
+	RearConnectionDistanceFromRootBogey = 80.f;
+
 	//set the bogey distance floats in BP Constructor
 }
 

@@ -29,8 +29,17 @@ public:
 	// Sets default values for this actor's properties
 	ATrain();
 
-	UFUNCTION(BlueprintCallable, CallInEditor)
-	void SetOnTrack();
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Train")
+	void SetOnTrack(float DistanceFromNextTrain);
+
+	UFUNCTION(CallInEditor, Category = "Train")
+	void SetOnTrackEditor();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float FrontConnectionDistanceFromRootBogey = 0.f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float RearConnectionDistanceFromRootBogey = 0.f;
 
 protected:
 	// Called when the game starts or when spawned

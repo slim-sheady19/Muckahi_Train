@@ -85,13 +85,14 @@ void ATrain::GetTrackSpline()
 	}
 }
 
-void ATrain::SetOnTrack()
+void ATrain::SetOnTrack(float DistanceFromNextTrain = 0.f)
 {
 	GetTrackSpline();
 
 	if (TrackSpline)
 	{
-		FTransform splineTransformFromPosition = TrackSpline->Spline->GetTransformAtDistanceAlongSpline(StartPosition, ESplineCoordinateSpace::World);
+		//float positionOnSpline = StartPosition + DistanceFromNextTrain;
+		FTransform splineTransformFromPosition = TrackSpline->Spline->GetTransformAtDistanceAlongSpline(DistanceFromNextTrain, ESplineCoordinateSpace::World);
 		RootBogey->SetWorldTransform(splineTransformFromPosition);
 	}
 	else
@@ -101,10 +102,30 @@ void ATrain::SetOnTrack()
 
 }
 
+void ATrain::SetOnTrackEditor()
+{
+	GetTrackSpline();
+
+	if (TrackSpline)
+	{
+		float positionOnSpline = StartPosition;
+		FTransform splineTransformFromPosition = TrackSpline->Spline->GetTransformAtDistanceAlongSpline(positionOnSpline, ESplineCoordinateSpace::World);
+		RootBogey->SetWorldTransform(splineTransformFromPosition);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No track spline in level!"));
+	}
+}
+
 void ATrain::Destroyed()
 {
-	TrainController->RemoveTrainFromArray(this);
-
 	Super::Destroyed();
+
+	if (IsValid(TrainController))
+	{
+		TrainController->RemoveTrainFromArray(this);
+	}
+	
 }
 

@@ -13,5 +13,13 @@ UCLASS()
 class ACab : public ATrain
 {
 	GENERATED_BODY()
+
+public:
+
+	//ACab();
+
+private:
+
+	//USceneComponent* Front
 	
 };

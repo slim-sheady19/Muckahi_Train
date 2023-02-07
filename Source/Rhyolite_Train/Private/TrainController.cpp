@@ -24,13 +24,49 @@ void ATrainController::SpawnTrain()
 			FTransform spawnTransform = FTransform(); //create transform with default values
 			ATrain* spawnedTrain = CurrentLevel->SpawnActor<ATrain>(TrainBlueprintClass, spawnTransform);
 
-			if (spawnedTrain)
+			if ((IsValid(spawnedTrain)) && (TrainsInLevel.Num() > 0))
 			{
 				spawnedTrain->TrainController = this;
-				spawnedTrain->SetOnTrack();
-				TrainsInLevel.Add(spawnedTrain);
-				UE_LOG(LogTemp, Warning, TEXT("The train's name is %s"), *spawnedTrain->TrainController->GetName());
+				//spawnedTrain->SetOnTrack(0);
+				//ATrain* prevTrain = TrainsInLevel.Last();
+				//float distanceFromNextTrain = GetDistanceFromNextTrain(spawnedTrain);
+				//lastTrain->SetOnTrack(distanceFromNextTrain);
+				TrainsInLevel.Insert(spawnedTrain, 0);
+
+				spawnedTrain->SetOnTrack(0);
+
+				//this is crashing editor.  need to figure out how to bump all trains forward when new one is spawned
+				int numTrainsInLevel = TrainsInLevel.Num();
+				//UE_LOG(LogTemp, Warning, TEXT("The trainsinlevel value is: %d"), numTrainsInLevel);
+				for (int32 i = 0; i < numTrainsInLevel; i++)
+				{
+					//skip over newly spawned train
+					if (i > 0)
+					{
+						auto& train = TrainsInLevel[i];
+						auto& prevTrain = TrainsInLevel[i - 1];
+						//UE_LOG(LogTemp, Warning, TEXT("The train name is %s"), *train->GetName());
+						//UE_LOG(LogTemp, Warning, TEXT("The prevtrain name is %s"), *prevTrain->GetName());
+
+						float prevTrainStartPos = prevTrain->StartPosition;
+						float distanceFromNextTrain = GetDistanceFromNextTrain(prevTrain);
+						float newPosition = distanceFromNextTrain + prevTrainStartPos;
+						UE_LOG(LogTemp, Warning, TEXT("The float value is: %f"), newPosition);
+
+						train->StartPosition = newPosition;
+						train->SetOnTrack(newPosition);
+					}
+
+					
+	
+				}
 				
+			}
+			else //for first train being spawned *WORKS*
+			{
+				spawnedTrain->TrainController = this;
+				spawnedTrain->SetOnTrack(0);
+				TrainsInLevel.Add(spawnedTrain);
 			}
 		}
 	}

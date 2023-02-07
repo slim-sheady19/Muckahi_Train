@@ -14,6 +14,10 @@ class AHoist : public ATrain
 {
 	GENERATED_BODY()
 
+public:
+
+	AHoist();
+
 
 protected:
 

@@ -41,4 +41,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+
+	float GetDistanceFromNextTrain(ATrain* NextTrain)
+	{
+		return (NextTrain->FrontConnectionDistanceFromRootBogey + NextTrain->RearConnectionDistanceFromRootBogey);
+	}
+
 };

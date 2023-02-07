@@ -4,6 +4,12 @@
 #include "Hoist.h"
 #include "Kismet/KismetMathLibrary.h"
 
+AHoist::AHoist()
+{
+	FrontConnectionDistanceFromRootBogey = 710.f;
+	RearConnectionDistanceFromRootBogey = 50.f;
+}
+
 void AHoist::SetBogeyOnSpline(UPARAM(ref)USceneComponent* AttachPoint, UPARAM(ref)UStaticMeshComponent* Bogey)
 {
 	FVector attachPointCurrentLocation = AttachPoint->GetComponentLocation();
