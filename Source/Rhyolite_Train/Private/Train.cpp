@@ -1,14 +1,21 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+/**
+
+Train parent class that sets default values and contains functions common to all children.
+
+Original author: Shea Galley
+Current maintainer: Shea Galley
+
+*********************************************************************************/
 
 
 #include "Train.h"
 #include "TrackSpline.h"
+#include "TrainController.h"
 #include "Kismet/GameplayStatics.h"
 
-// Sets default values
+
 ATrain::ATrain()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootBogey = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Root Bogey"));
@@ -16,7 +23,9 @@ ATrain::ATrain()
 	RootBogey->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-// Called when the game starts or when spawned
+/**
+Call GetTrackSpline at Beginplay in case a train's TrackSpline is null
+*********************************************************************************/
 void ATrain::BeginPlay()
 {
 	Super::BeginPlay();
@@ -24,7 +33,7 @@ void ATrain::BeginPlay()
 	GetTrackSpline();
 }
 
-// Called every frame
+
 void ATrain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -38,6 +47,9 @@ void ATrain::Tick(float DeltaTime)
 	UpdateDistance(DeltaTime);
 }
 
+/**
+Called from child BP in tick
+*********************************************************************************/
 void ATrain::UpdateBogeyPosition(UStaticMeshComponent* Bogey, const float DeltaBogeyDistanceFromRootBogey)
 {
 	if (Bogey == nullptr)
@@ -51,6 +63,9 @@ void ATrain::UpdateBogeyPosition(UStaticMeshComponent* Bogey, const float DeltaB
 	Bogey->SetWorldTransform(splinePositionTransform);
 }
 
+/**
+Updating distance float in Tick
+*********************************************************************************/
 void ATrain::UpdateDistance(float DeltaTime)
 {
 	float deltaDistance = Speed * DeltaTime;
@@ -84,13 +99,16 @@ void ATrain::GetTrackSpline()
 	}
 }
 
-void ATrain::SetOnTrack()
+/**
+Called from TrainController when it has spawned a train
+*********************************************************************************/
+void ATrain::SetOnTrack(float DistanceFromNextTrain = 0.f)
 {
 	GetTrackSpline();
 
 	if (TrackSpline)
 	{
-		FTransform splineTransformFromPosition = TrackSpline->Spline->GetTransformAtDistanceAlongSpline(StartPosition, ESplineCoordinateSpace::World);
+		FTransform splineTransformFromPosition = TrackSpline->Spline->GetTransformAtDistanceAlongSpline(DistanceFromNextTrain, ESplineCoordinateSpace::World);
 		RootBogey->SetWorldTransform(splineTransformFromPosition);
 	}
 	else
@@ -98,5 +116,39 @@ void ATrain::SetOnTrack()
 		UE_LOG(LogTemp, Warning, TEXT("No track spline in level!"));
 	}
 
+}
+
+
+/**
+Same function as above but takes no float so we can call it manually from editor
+*********************************************************************************/
+void ATrain::SetOnTrackEditor()
+{
+	GetTrackSpline();
+
+	if (TrackSpline)
+	{
+		float positionOnSpline = StartPosition;
+		FTransform splineTransformFromPosition = TrackSpline->Spline->GetTransformAtDistanceAlongSpline(positionOnSpline, ESplineCoordinateSpace::World);
+		RootBogey->SetWorldTransform(splineTransformFromPosition);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No track spline in level!"));
+	}
+}
+
+/**
+Overriding Destroyed() to remove deleted train in editor from TrainsInLevel array
+*********************************************************************************/
+void ATrain::Destroyed()
+{
+	Super::Destroyed();
+
+	if (IsValid(TrainController))
+	{
+		TrainController->RemoveTrainFromArray(this);
+	}
+	
 }
 
