@@ -43,11 +43,3 @@ void AHoist::RotateAndScaleConnectorTube(
 	ConnectorTube->SetWorldRotation(lookAtRotation);
 	ConnectorTube->SetRelativeScale3D(FVector(lengthRatio, 1, 1));
 }
-
-//Update bogey position root bogey
-//attach to spline rear bogey front
-//update bogey position front bogey back
-//attach front bogey front to spline
-//rotate spreader bars (new function)
-//rotate hoist
-//rotate connector tube and set relative scale

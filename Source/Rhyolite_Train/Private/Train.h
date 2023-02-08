@@ -1,4 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+/**
+
+Train parent class that sets default values and contains functions common to all children.
+
+Original author: Shea Galley
+Current maintainer: Shea Galley
+
+*********************************************************************************/
 
 #pragma once
 
@@ -29,9 +36,11 @@ public:
 	// Sets default values for this actor's properties
 	ATrain();
 
+	//Called from TrainController when it has spawned a train
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Train")
 	void SetOnTrack(float DistanceFromNextTrain);
 
+	//Same function as above but takes no float so we can call it manually from editor
 	UFUNCTION(CallInEditor, Category = "Train")
 	void SetOnTrackEditor();
 
@@ -41,6 +50,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float RearConnectionDistanceFromRootBogey = 0.f;
 
+	//Ref to train ahead (in array) of current train so we can get the correct distance it needs to be from that one
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Train")
 	ATrain* PreviousTrain;
 
@@ -50,15 +60,16 @@ protected:
 
 protected:
 
+	//Called from child BP in tick
 	UFUNCTION(BlueprintCallable)
 	void UpdateBogeyPosition(UPARAM(ref) UStaticMeshComponent* Bogey, const float DeltaBogeyDistanceFromRootBogey = 0.f);
 
+	//Updating distance float in Tick
 	void UpdateDistance(float DeltaTime);
 
 	void GetTrackSpline();
 
-	//virtual void BeginDestroy() override;
-
+	//Overriding Destroyed() to remove deleted train in editor from TrainsInLevel array
 	virtual void Destroyed() override;
 
 public:	
@@ -68,7 +79,7 @@ public:
 
 public:
 
-	//Bogey that attaches to track spline
+	//Every train class has a root bogey that attaches to the track spline
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	UStaticMeshComponent* RootBogey = nullptr;
 

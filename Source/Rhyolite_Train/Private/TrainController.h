@@ -1,4 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+/**
+
+Train controller class implementation mainly used for the spawning, organization, and settings of trains all in one Actor.
+
+Original author: Shea Galley
+Current maintainer: Shea Galley
+
+*********************************************************************************/
 
 #pragma once
 
@@ -28,17 +35,32 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	//Spawn child BPs from this class and add to the TrainsInLevel array.
 	UFUNCTION(CallInEditor, Category = "Spawning")
 	void SpawnTrain();
 
+	//Use this to select which child BP of train to spawn in level from Train Controller
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 	TSubclassOf<ATrain> TrainBlueprintClass = ATrain::StaticClass();
+
+	//Use this to set same train speed on all trains in level with function SetSpeedAllTrains
+	UPROPERTY(EditAnywhere, Category = "Organization")
+	float TrainSpeed = 200.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Organization")
 	TArray<ATrain*> TrainsInLevel;
 
+	UFUNCTION(CallInEditor, Category = "Organization")
+		void SetSpeedAllTrains()
+	{
+		for (auto& train : TrainsInLevel)
+		{
+			train->Speed = TrainSpeed;
+		}
+	}
+
 public:	
-	// Called every frame
+
 	virtual void Tick(float DeltaTime) override;
 
 private:

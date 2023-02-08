@@ -33,3 +33,20 @@ void ALocomotive::UpdateRotation()
 	Body->SetWorldRotation(lookAtRotation);
 }
 
+void ALocomotive::RotateAndScaleConnectorTube(
+	UPARAM(ref)UStaticMeshComponent* ConnectorTube,
+	UPARAM(ref)UStaticMeshComponent* StartConnector,
+	UPARAM(ref)UStaticMeshComponent* TargetConnector)
+{
+	FVector startConnectorLocation = StartConnector->GetComponentLocation();
+	FVector targetConnectorLocation = TargetConnector->GetComponentLocation();
+	FRotator lookAtRotation = UKismetMathLibrary::FindLookAtRotation(startConnectorLocation, targetConnectorLocation);
+
+	FVector vectorLength = startConnectorLocation - targetConnectorLocation;
+	float length = vectorLength.Size();
+	float lengthRatio = length / 100;
+
+	ConnectorTube->SetWorldRotation(lookAtRotation);
+	ConnectorTube->SetRelativeScale3D(FVector(lengthRatio, 1, 1));
+}
+

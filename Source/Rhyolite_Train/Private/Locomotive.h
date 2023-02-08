@@ -43,5 +43,11 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void UpdateRotation();
 
+	UFUNCTION(BlueprintCallable)
+		void RotateAndScaleConnectorTube(
+			UPARAM(ref)UStaticMeshComponent* ConnectorTube,
+			UPARAM(ref)UStaticMeshComponent* StartConnector,
+			UPARAM(ref)UStaticMeshComponent* TargetConnector);
+
 	
 };
